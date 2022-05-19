@@ -24,7 +24,7 @@ exports.handleLogin = (req, res, next) => {
                             }
                         },
                             secretKey,
-                            { expiresIn: '60s' }  
+                            { expiresIn: '24h' }  
                     );
                     console.log(accesToken);
                     console.log(roles);
@@ -51,6 +51,8 @@ exports.handleLoginEntreprise = (req, res, next) => {
                         return res.status(401).json({ error: 'mot de passe incorrect you snfb' });
                     }
                     const roles = Object.values(user.roles).filter(Boolean);
+                    const name = user.name;
+                    const userId = user._id;
                     const secretKey = 'RANDOM_TOKEN_SECRET';
                     const accesToken = jwt.sign(
                         {
@@ -60,13 +62,15 @@ exports.handleLoginEntreprise = (req, res, next) => {
                             }
                         },
                             secretKey,
-                            { expiresIn: '120s' }  
+                            { expiresIn: '24h' }  
                     );
                     console.log(accesToken);
                     console.log(roles);
                     res.status(200).json({
                         accesToken,
-                        roles
+                        roles,
+                        name,
+                        userId
                     });
                 })
                 .catch(error => res.status(500).json({ 'messaeg': error }));
